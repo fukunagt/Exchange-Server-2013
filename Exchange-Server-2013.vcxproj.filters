@@ -9,5 +9,11 @@
     <None Include="script\exch.vbs">
       <Filter>script</Filter>
     </None>
+    <None Include="script\test-start.bat">
+      <Filter>script</Filter>
+    </None>
+    <None Include="script\W#EXCHG.bat">
+      <Filter>script</Filter>
+    </None>
   </ItemGroup>
 </Project>
