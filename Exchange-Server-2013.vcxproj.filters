@@ -6,13 +6,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="script\exch.vbs">
+    <None Include="script\ChangeADParameters.ps1">
       <Filter>script</Filter>
     </None>
-    <None Include="script\test-start.bat">
+    <None Include="script\conf_mbx.bat">
       <Filter>script</Filter>
     </None>
-    <None Include="script\W#EXCHG.bat">
+    <None Include="script\conf_sys.bat">
+      <Filter>script</Filter>
+    </None>
+    <None Include="script\MountMailboxDatabase.ps1">
+      <Filter>script</Filter>
+    </None>
+    <None Include="script\start.bat">
       <Filter>script</Filter>
     </None>
   </ItemGroup>
