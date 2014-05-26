@@ -21,5 +21,14 @@
     <None Include="script\start.bat">
       <Filter>script</Filter>
     </None>
+    <None Include="script\DismountMailboxDatabase.ps1">
+      <Filter>script</Filter>
+    </None>
+    <None Include="script\stop.bat">
+      <Filter>script</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="README.txt" />
   </ItemGroup>
 </Project>
