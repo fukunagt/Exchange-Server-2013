@@ -6,8 +6,6 @@ rem ***************************************
 
 
 
-
-
 rem ***************************************
 rem Check startup attributes
 rem ***************************************
@@ -19,25 +17,22 @@ GOTO no_arm
 
 
 
-
-
 rem ***************************************
 rem Process for normal quitting program
 rem ***************************************
 :NORMAL
 :FAILOVER
 
-
 rem Check Disk
 IF "%CLP_DISK%" == "FAILURE" GOTO ERROR_DISK
 
 cd %CLP_SCRIPT_PATH%
-call conf_sys.bat
+call config.bat
 
 rem *************
 rem Routine procedure
 rem *************
-PowerShell -command ". '%EXCHBIN%\RemoteExchange.ps1'; Connect-ExchangeServer -auto; .\DismountMailboxDatabase.ps1"
+PowerShell -command ". '%EXCHBIN%\RemoteExchange.ps1'; Connect-ExchangeServer -auto; .\DismountMailboxDatabase.ps1 '%MAILBOX%'"
 
 
 GOTO EXIT

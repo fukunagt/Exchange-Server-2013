@@ -12,8 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="script\ChangeADParameters.ps1" />
-    <None Include="script\conf_mbx.bat" />
-    <None Include="script\conf_sys.bat" />
+    <None Include="script\config.bat" />
     <None Include="script\DismountMailboxDatabase.ps1" />
     <None Include="script\MountMailboxDatabase.ps1" />
     <None Include="script\start.bat" />

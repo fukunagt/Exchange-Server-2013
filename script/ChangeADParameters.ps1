@@ -11,7 +11,6 @@ $MailboxDatabaseName = $args[2]
 
 # Get computer name
 $ComputerName = $env:COMPUTERNAME
-#$ComputerName = "WS2012-34"
 
 # Get Active Directory name
 $ActiveDirectoryName = (Get-ADDomain).DistinguishedName

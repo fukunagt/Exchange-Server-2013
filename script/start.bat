@@ -1,24 +1,19 @@
 rem ***************************************
-rem *              start.bat              *
+rem * start.bat                           *
 rem *                                     *
-rem * title   : FIXME                     *
 rem ***************************************
-
-
 
 
 
 rem ***************************************
 rem Check startup attributes
 rem ***************************************
-IF "%CLP_EVENT%" == "START" GOTO NORMAL
-IF "%CLP_EVENT%" == "FAILOVER" GOTO FAILOVER
-IF "%CLP_EVENT%" == "RECOVER" GOTO RECOVER
+if "%CLP_EVENT%" == "START" goto NORMAL
+if "%CLP_EVENT%" == "FAILOVER" goto FAILOVER
+if "%CLP_EVENT%" == "RECOVER" goto RECOVER
 
 rem Cluster Server is not started
-GOTO no_arm
-
-
+goto NO_ARM
 
 
 
@@ -29,23 +24,20 @@ rem ***************************************
 :FAILOVER
 
 rem Check Disk
-IF "%CLP_DISK%" == "FAILURE" GOTO ERROR_DISK
+if "%CLP_DISK%" == "FAILURE" goto ERROR_DISK
 
-rem ****
-rem TODO:
-rem ****
 cd %CLP_SCRIPT_PATH%
 
-call conf_sys.bat
-call conf_mbx.bat
+call config.bat
 
-echo === Change AD parameters =======
+rem === Change AD parameters =======
 PowerShell .\ChangeADParameters.ps1 "'%ORGANIZATION%' '%ADMINISTRATIVE_GROUP%' '%MAILBOX%'"
 
-echo === Mount a mailbox database ===
-PowerShell -command ". '%EXCHBIN%\RemoteExchange.ps1'; Connect-ExchangeServer -auto; .\MountMailboxDatabase.ps1"
+rem === Mount a mailbox database ===
+PowerShell -command ". '%EXCHBIN%\RemoteExchange.ps1'; Connect-ExchangeServer -auto; .\MountMailboxDatabase.ps1 '%MAILBOX%'"
 
-GOTO EXIT
+goto EXIT
+
 
 
 rem ***************************************
@@ -57,27 +49,23 @@ rem *************
 rem Recovery process after return to the cluster
 rem *************
 
-GOTO EXIT
-
-
+goto EXIT
 
 
 
 rem ***************************************
 rem Irregular process
 rem ***************************************
-
 rem Process for disk errors
 :ERROR_DISK
-ARMBCAST /MSG "Failed to connect the switched disk partition" /A
-GOTO EXIT
-
+rem FIXME
+rem ARMBCAST /MSG "Failed to connect the switched disk partition" /A
+goto EXIT
 
 rem Cluster Server is not started
-:no_arm
-ARMBCAST /MSG "Cluster Server is offline" /A
-
-
+:NO_ARM
+rem FIXME
+rem ARMBCAST /MSG "Cluster Server is offline" /A
 
 
 

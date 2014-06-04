@@ -9,12 +9,6 @@
     <None Include="script\ChangeADParameters.ps1">
       <Filter>script</Filter>
     </None>
-    <None Include="script\conf_mbx.bat">
-      <Filter>script</Filter>
-    </None>
-    <None Include="script\conf_sys.bat">
-      <Filter>script</Filter>
-    </None>
     <None Include="script\MountMailboxDatabase.ps1">
       <Filter>script</Filter>
     </None>
@@ -25,6 +19,9 @@
       <Filter>script</Filter>
     </None>
     <None Include="script\stop.bat">
+      <Filter>script</Filter>
+    </None>
+    <None Include="script\config.bat">
       <Filter>script</Filter>
     </None>
   </ItemGroup>
