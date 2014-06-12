@@ -19,7 +19,7 @@
     <None Include="script\stop.bat" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="README.txt" />
+    <Text Include="README.md" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{B545B80E-E9DF-4192-B956-F49602010A6A}</ProjectGuid>
