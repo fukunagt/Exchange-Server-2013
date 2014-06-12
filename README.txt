@@ -1,20 +1,20 @@
-1. The purpose of the scripts
-   The scripts to create Exchange Server 2013 cluster with EXPRESSCLUSTER.
+## The purpose of the scripts
+The scripts to create Exchange Server 2013 cluster with EXPRESSCLUSTER.
 
-2. The roles of each script
-   start.bat
-     When you initiate to start a script resource, this bat file will be called.
+## The roles of each script
+### start.bat
+When you initiate to start a script resource, this bat file will be called.
 
-   stop.bat
-     When you initiate to stop script resource, this bat file will be called.
+### stop.bat
+When you initiate to stop script resource, this bat file will be called.
 
-   config.bat
-     It contains some parameters should be modified to match your environment.
+### config.bat
+It contains some parameters should be modified to match your environment.
 
-   ChangeADParameters.ps1
-     It will be called by start.bat to change attributes of ADSI objects and containers as below.
+### ChangeADParameters.ps1
+It will be called by start.bat to change attributes of ADSI objects and containers as below.
 
-     *: This attribute will be primary/secondary server name.
+*: This attribute will be primary/secondary server name.
 
      <Your Domain>
       |
@@ -43,9 +43,9 @@
                                                    * msExchHostServerLink
                                                    * name
 
-   MountMailboxDatabase.ps1
-     It will be called by start.bat to mount a mailbox database.
+### MountMailboxDatabase.ps1
+It will be called by start.bat to mount a mailbox database.
 
-   DismountMailboxDatabase.ps1
-     It will be called by stop.bat to dismount a mailbox database.
+### DismountMailboxDatabase.ps1
+It will be called by stop.bat to dismount a mailbox database.
 
