@@ -2,19 +2,32 @@
 # Change AD parameters for a mailbox database 
 #
 
-# FIXME: Check the argumetns
+# Set error codes
+$ErrorGetADDomain    = 20
+$ErrorGetADObject    = 21
+$ErrorSetADObject    = 22
+$ErrorRenameADObject = 23
 
-# Insert the arguments to the variables
-$OrganizationName = $args[0]
-$AdministrativeGroupName = $args[1]
-$MailboxDatabaseName = $args[2]
+# Set my script name
+$MyName = $MyInvocation.MyCommand.Name
+Write-Output "$MyName (PID:$PID) : Started."
 
 # Get computer name
 $ComputerName = $env:COMPUTERNAME
 
+# Insert the environment variables to the local variables
+$OrganizationName = $env:OrganizationName
+$AdministrativeGroupName = $env:AdministrativeGroupName
+$MailboxDatabaseName = $env:MailboxDatabaseName
+
 # Get Active Directory name
 $ActiveDirectoryName = (Get-ADDomain).DistinguishedName
-# FIXME: Error handling
+$bRet = $?
+if ($bRet -eq $False)
+{
+        clplogcmd -m "$MyName : Get-ADDomain failed." -i $ErrorGetADDomain -l ERR
+        exit $ErrorGetADDomain
+}
 
 # Show the variables
 Write-Output "++++++++++++++++++++++++++++++++++++++++++++++++++"
@@ -55,14 +68,17 @@ $ExchangeDN = "/o=" + $OrganizationName +`
               "/cn=Servers" +`
               "/cn=" + $ComputerName +` 
               "/cn=Microsoft Private MDB"
-Write-Output "ExchangeDN                 : $ExchangeDN"
+Write-Output "ExchangeDN                : $ExchangeDN"
 Write-Output "++++++++++++++++++++++++++++++++++++++++++++++++++"
 
 # Get mailbox database object
 $MailboxDatabaseObject = Get-ADObject -Identity $MailboxDatabaseDN -Properties *
-# FIXME: Error handling
-
-# Set local variables
+$bRet = $?
+if ($bRet -eq $False)
+{
+        clplogcmd -m "$MyName : Get-ADObject failed." -i $ErrorGetADObject -l ERR
+        exit $ErrorGetADObject
+}
 $msExchMasterServerOrAvailabilityGroup = $MailboxDatabaseObject.msExchMasterServerOrAvailabilityGroup
 $msExchOwningServer = $MailboxDatabaseObject.msExchOwningServer
 $legacyExchangeDN = $MailboxDatabaseObject.legacyExchangeDN
@@ -72,17 +88,32 @@ Write-Output "legacyExchangeDN       (B): $legacyExchangeDN"
 
 # Replace
 Set-ADObject $MailboxDatabaseObject -Replace @{msExchMasterServerOrAvailabilityGroup="$ServerDN"}
-# FIXME: Error handling
+$bRet = $?
+if ($bRet -eq $False)
+{
+        clplogcmd -m "$MyName : Set-ADObject failed." -i $ErrorSetADObject -l ERR
+        exit $ErrorSetADObject
+}
 Set-ADObject $MailboxDatabaseObject -Replace @{msExchOwningServer="$ServerDN"}
-# FIXME: Error handling
+$bRet = $?
+if ($bRet -eq $False)
+{
+        clplogcmd -m "$MyName : Set-ADObject failed." -i $ErrorSetADObject -l ERR
+        exit $ErrorSetADObject
+}
 Set-ADObject $MailboxDatabaseObject -Replace @{legacyExchangeDN="$ExchangeDN"}
-# FIXME: Error handling
-
-# Check
+$bRet = $?
+if ($bRet -eq $False)
+{
+        clplogcmd -m "$MyName : Set-ADObject failed." -i $ErrorSetADObject -l ERR
+        exit $ErrorSetADObject
+}
 $MailboxDatabaseObject = Get-ADObject -Identity $MailboxDatabaseDN -Properties *
-# FIXME: Error handling
-
-# Set local variables
+$bRet = $?
+if ($bRet -eq $False)
+{
+        Write-Output "$MyName : Get-ADObject failed, ignore."
+}
 $msExchMasterServerOrAvailabilityGroup = $MailboxDatabaseObject.msExchMasterServerOrAvailabilityGroup
 $msExchOwningServer = $MailboxDatabaseObject.msExchOwningServer
 $legacyExchangeDN = $MailboxDatabaseObject.legacyExchangeDN
@@ -90,30 +121,61 @@ Write-Output "msExchMasterServerOrAG (A): $msExchMasterServerOrAvailabilityGroup
 Write-Output "msExchOwningServer     (A): $msExchOwningServer"
 Write-Output "legacyExchangeDN       (A): $legacyExchangeDN"
 
-
 # Get msExchMDBcopy distinguished name
 $msExchMDBcopyDN = Get-ADObject -Filter {(ObjectClass -Like "msExchMDBcopy")}`
                                 -SearchBase $MailboxDatabaseDN
-Write-Output "msExchMDBcopyDN (B)       : $msExchMDBcopyDN"
+$bRet = $?
+if ($bRet -eq $False)
+{
+        clplogcmd -m "$MyName : Get-ADObject failed." -i $ErrorGetADObject -l ERR
+        exit $ErrorGetADObject
+}
+Write-Output "msExchMDBcopyDN        (B): $msExchMDBcopyDN"
 
-# Get 
+# Get mailbox database property
 $msExchMDBcopyObject = Get-ADObject -Identity $msExchMDBcopyDN -Properties *
+$bRet = $?
+if ($bRet -eq $False)
+{
+        clplogcmd -m "$MyName : Get-ADObject failed." -i $ErrorGetADObject -l ERR
+        exit $ErrorGetADObject
+}
 $msExchHostServerLink = $msExchMDBcopyObject.msExchHostServerLink
-Write-Output "msExchHostServerLink (B)  : $msExchHostServerLink"
+Write-Output "msExchHostServerLink   (B): $msExchHostServerLink"
 
 # Replace
 Set-ADObject -Identity $msExchMDBcopyObject -Replace @{msExchHostServerLink="$ServerDN"}
-
-# Check 
+$bRet = $?
+if ($bRet -eq $False)
+{
+        clplogcmd -m "$MyName : Get-ADObject failed." -i $ErrorGetADObject -l ERR
+        exit $ErrorGetADObject
+}
 $msExchMDBcopyObject = Get-ADObject -Identity $msExchMDBcopyDN -Properties *
+$bRet = $?
+if ($bRet -eq $False)
+{
+        Write-Output "$MyName : Get-ADObject failed, ignore."
+}
 $msExchHostServerLink = $msExchMDBcopyObject.msExchHostServerLink
-Write-Output "msExchHostServerLink (A)  : $msExchHostServerLink"
+Write-Output "msExchHostServerLink   (A): $msExchHostServerLink"
 
-
+# Rename mailbox database property
 Rename-ADObject -Identity "$msExchMDBcopyDN" -NewName "$ComputerName"
+$bRet = $?
+if ($bRet -eq $False)
+{
+        clplogcmd -m "$MyName : Rename-ADObject failed." -i $ErrorRenameADObject -l ERR
+        exit $ErrorRenameADObject
+}
 $msExchMDBcopyDN = Get-ADObject -Filter {(ObjectClass -Like "msExchMDBcopy")}`
                                 -SearchBase $MailboxDatabaseDN
-Write-Output "msExchMDBcopyDN (A)       : $msExchMDBcopyDN"
+$bRet = $?
+if ($bRet -eq $False)
+{
+        Write-Output "Get-ADObject failed, ignore."
+}
+Write-Output "msExchMDBcopyDN        (A): $msExchMDBcopyDN"
 
-Write-Output "Done!"
-Write-Output ""
+Write-Output "$MyName : Completed successfully."
+exit 0

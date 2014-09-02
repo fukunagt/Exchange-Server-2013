@@ -12,9 +12,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="script\ChangeADParameters.ps1" />
-    <None Include="script\config.bat" />
-    <None Include="script\DismountMailboxDatabase.ps1" />
-    <None Include="script\MountMailboxDatabase.ps1" />
+    <None Include="script\CheckExchangeServices.ps1" />
+    <None Include="script\ControlMailboxDatabase.ps1" />
+    <None Include="script\SetEnvironment.bat" />
     <None Include="script\start.bat" />
     <None Include="script\stop.bat" />
   </ItemGroup>

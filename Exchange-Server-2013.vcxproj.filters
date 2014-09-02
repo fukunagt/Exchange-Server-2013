@@ -9,19 +9,19 @@
     <None Include="script\ChangeADParameters.ps1">
       <Filter>script</Filter>
     </None>
-    <None Include="script\MountMailboxDatabase.ps1">
-      <Filter>script</Filter>
-    </None>
     <None Include="script\start.bat">
-      <Filter>script</Filter>
-    </None>
-    <None Include="script\DismountMailboxDatabase.ps1">
       <Filter>script</Filter>
     </None>
     <None Include="script\stop.bat">
       <Filter>script</Filter>
     </None>
-    <None Include="script\config.bat">
+    <None Include="script\CheckExchangeServices.ps1">
+      <Filter>script</Filter>
+    </None>
+    <None Include="script\ControlMailboxDatabase.ps1">
+      <Filter>script</Filter>
+    </None>
+    <None Include="script\SetEnvironment.bat">
       <Filter>script</Filter>
     </None>
   </ItemGroup>

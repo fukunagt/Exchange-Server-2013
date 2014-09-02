@@ -6,6 +6,14 @@ rem ***************************************
 
 
 rem ***************************************
+rem Error codes
+rem ***************************************
+set EXITCODE=0
+set ERROR_SD=1
+set ERROR_CLUSTER=2
+
+
+rem ***************************************
 rem Check startup attributes
 rem ***************************************
 if "%CLP_EVENT%" == "START" goto NORMAL
@@ -28,15 +36,22 @@ if "%CLP_DISK%" == "FAILURE" goto ERROR_DISK
 
 cd %CLP_SCRIPT_PATH%
 
-call config.bat
+rem === Set Environment Variables ===
+call SetEnvironment.bat
+
+rem === Check if all Exchange services are running ===
+PowerShell .\CheckExchangeServices.ps1
 
 rem === Change AD parameters =======
-PowerShell .\ChangeADParameters.ps1 "'%ORGANIZATION%' '%ADMINISTRATIVE_GROUP%' '%MAILBOX%'"
+PowerShell .\ChangeADParameters.ps1
+set EXITCODE=%ERRORLEVEL%
+if %EXITCODE% neq 0 goto EXIT
 
 rem === Mount a mailbox database ===
-PowerShell -command ". '%EXCHBIN%\RemoteExchange.ps1'; Connect-ExchangeServer -auto; .\MountMailboxDatabase.ps1 '%MAILBOX%'"
-
-goto EXIT
+set DatabaseControl=Mount
+PowerShell -File "%ExchangeBin%\RemoteExchange-ECX.ps1"
+set EXITCODE=%ERRORLEVEL%
+if %EXITCODE% neq 0 goto EXIT
 
 
 
@@ -58,15 +73,16 @@ rem Irregular process
 rem ***************************************
 rem Process for disk errors
 :ERROR_DISK
-rem FIXME
-rem ARMBCAST /MSG "Failed to connect the switched disk partition" /A
+clplogcmd -m "Failed to connect the shared disk." -i %ERROR_SD% -l ERR
+set EXITCODE=%ERROR_SD%
 goto EXIT
 
 rem Cluster Server is not started
 :NO_ARM
-rem FIXME
-rem ARMBCAST /MSG "Cluster Server is offline" /A
+clplogcmd -m "Cluster Server is not running." -i %ERROR_CLUSTER% -l ERR
+set EXITCODE=%ERROR_CLUSTER%
 
 
 
 :EXIT
+exit %EXITCODE%
