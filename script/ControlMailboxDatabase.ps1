@@ -28,9 +28,11 @@ if ($env:DatabaseControl -eq "Mount")
         $bRet = $?
         if ($bRet -eq $False)
         {
+                Write-Output "Mount-Database failed."
                 clplogcmd -m "$MyName : Mount-Database failed." -i $ErrorMountDatabase -l ERR
                 exit $ErrorMountDatabase
         }
+        Write-Output "Mount-Database completed."
         Get-MailboxDatabase -Status -Identity $env:MailboxDatabaseName | Format-List -Property Name,ServerName,Mounted,MountedOnServer
 }
 elseif ($env:DatabaseControl -eq "Dismount") 
@@ -39,9 +41,11 @@ elseif ($env:DatabaseControl -eq "Dismount")
         $bRet = $?
         if ($bRet -eq $False)
         {
+                Write-Output "Dismount-Database failed."
                 clplogcmd -m "$MyName : Dismount-Database failed." -i $ErrorDismountDatabase -l ERR
                 exit $ErrorDismountDatabase
         }
+        Write-Output "Dismount-Database completed."
         Get-MailboxDatabase -Status -Identity $env:MailboxDatabaseName | Format-List -Property Name,ServerName,Mounted,MountedOnServer
 }
 else 
@@ -50,5 +54,5 @@ else
         exit $ErrorWrongControlCode
 }
 
-Write-Output "$MyName : Completed successfully."
+Write-Output "$MyName (PID:$PID) : Completed successfully."
 exit 0

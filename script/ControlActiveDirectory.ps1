@@ -33,9 +33,9 @@ if ($bRet -eq $False)
 Write-Output "++++++++++++++++++++++++++++++++++++++++++++++++++"
 Write-Output "Organization              : $OrganizationName" 
 Write-Output "Administrative Group      : $AdministrativeGroupName" 
-Write-Output "Mailbox Database          : $MailboxDatabaseName" 
 Write-Output "Computer Name             : $ComputerName"
 Write-Output "Active Directory          : $ActiveDirectoryName"
+Write-Output "Mailbox Database          : $MailboxDatabaseName" 
 
 # Set mailbox database distinguished name
 $MailboxDatabaseDN = "CN=" + $MailboxDatabaseName +`
@@ -66,7 +66,7 @@ $ExchangeDN = "/o=" + $OrganizationName +`
               "/ou=" + $AdministrativeGroupName +`
               "/cn=Configuration" +`
               "/cn=Servers" +`
-              "/cn=" + $ComputerName +` 
+              "/cn=" + $ComputerName +`
               "/cn=Microsoft Private MDB"
 Write-Output "ExchangeDN                : $ExchangeDN"
 Write-Output "++++++++++++++++++++++++++++++++++++++++++++++++++"
@@ -177,5 +177,5 @@ if ($bRet -eq $False)
 }
 Write-Output "msExchMDBcopyDN        (A): $msExchMDBcopyDN"
 
-Write-Output "$MyName : Completed successfully."
+Write-Output "$MyName (PID:$PID) : Completed successfully."
 exit 0

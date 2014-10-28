@@ -11,12 +11,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <None Include="script\ChangeADParameters.ps1" />
     <None Include="script\CheckExchangeServices.ps1" />
+    <None Include="script\CheckExchangeServices01.bat" />
+    <None Include="script\CheckExchangeServices02.bat" />
+    <None Include="script\ControlActiveDirectory.ps1" />
+    <None Include="script\ControlActiveDirectory01.bat" />
+    <None Include="script\ControlActiveDirectory02.bat" />
     <None Include="script\ControlMailboxDatabase.ps1" />
+    <None Include="script\ControlMailboxDatabase01.bat" />
+    <None Include="script\ControlMailboxDatabase02.bat" />
     <None Include="script\SetEnvironment.bat" />
-    <None Include="script\start.bat" />
-    <None Include="script\stop.bat" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="README.md" />
